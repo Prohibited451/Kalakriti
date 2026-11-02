@@ -1,0 +1,24 @@
+{
+  "settings": {
+    "whatsappNumber": "918448412211",
+    "noidaFee": 150,
+    "shipDays": "3-6 days",
+    "preDiwaliCutoff": "Sat 7 Nov 2026"
+  },
+  "products": [
+    {"code": "C-01", "name": "Wax-filled diyas, set of 6", "price": 199, "preDiwali": true, "description": ""},
+    {"code": "C-02", "name": "Soy jar candle 150g", "price": 249, "preDiwali": true, "description": ""},
+    {"code": "C-03", "name": "Gel jar candle", "price": 299, "preDiwali": true, "description": ""},
+    {"code": "C-04", "name": "Candle gift pair", "price": 499, "preDiwali": true, "description": ""},
+    {"code": "P-01", "name": "Ganesha idol (gold)", "price": 599, "preDiwali": true, "description": ""},
+    {"code": "P-02", "name": "Floral lantern with LED tealight", "price": 399, "preDiwali": true, "description": ""},
+    {"code": "P-03", "name": "Leaf lamp", "price": 1999, "preDiwali": false, "description": ""},
+    {"code": "P-04", "name": "Ribbed mushroom lamp", "price": 999, "preDiwali": false, "description": ""},
+    {"code": "P-05", "name": "Gold cube lamp", "price": 799, "preDiwali": false, "description": ""},
+    {"code": "P-06", "name": "Jewellery dish", "price": 699, "preDiwali": false, "description": ""},
+    {"code": "P-07", "name": "Spinning star top", "price": 199, "preDiwali": true, "description": ""},
+    {"code": "P-08", "name": "Ballerina", "price": 499, "preDiwali": true, "description": "", "ship": "Ships in 1 day", "colors": ["Red", "White", "Gold"]},
+    {"code": "P-09", "name": "Toy car", "price": 349, "preDiwali": false, "description": ""},
+    {"code": "P-10", "name": "Infinity Torus lamp", "price": 599, "preDiwali": false, "description": ""}
+  ]
+}

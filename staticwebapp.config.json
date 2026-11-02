@@ -1,0 +1,12 @@
+{
+  "routes": [
+    { "route": "/admin", "redirect": "/admin/", "statusCode": 301 },
+    { "route": "/admin/*", "allowedRoles": ["authenticated"] },
+    { "route": "/api/*", "allowedRoles": ["authenticated"] },
+    { "route": "/products.json", "headers": { "cache-control": "no-cache" } }
+  ],
+  "responseOverrides": {
+    "401": { "redirect": "/.auth/login/github?post_login_redirect_uri=.referrer", "statusCode": 302 }
+  },
+  "platform": { "apiRuntime": "node:18" }
+}

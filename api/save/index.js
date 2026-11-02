@@ -9,6 +9,15 @@ function fail(context, status, error) {
 }
 const isStr = (v, max) => typeof v === "string" && v.length <= max;
 
+// A colour is {name, hex}. A plain string is accepted too (name only, no swatch).
+function cleanColor(c) {
+  if (typeof c === "string") return isStr(c, 20) && c.trim() ? { name: c.trim() } : null;
+  if (!c || typeof c !== "object" || !isStr(c.name, 20) || !c.name.trim()) return null;
+  const out = { name: c.name.trim() };
+  if (typeof c.hex === "string" && /^#[0-9a-fA-F]{6}$/.test(c.hex)) out.hex = c.hex.toLowerCase();
+  return out;
+}
+
 function cleanSettings(s) {
   if (!s || typeof s !== "object") throw new Error("Settings are missing.");
   const wa = String(s.whatsappNumber || "");
@@ -32,7 +41,7 @@ function cleanProducts(list) {
     const o = { code: p.code, name: p.name.trim(), price: Math.round(p.price), preDiwali: p.preDiwali === true, description: isStr(p.description, 200) ? p.description.trim() : "" };
     if (isStr(p.ship, 40) && p.ship.trim()) o.ship = p.ship.trim();
     if (Array.isArray(p.colors)) {
-      const cs = p.colors.filter((x) => isStr(x, 20) && x.trim()).map((x) => x.trim()).slice(0, 8);
+      const cs = p.colors.map(cleanColor).filter(Boolean).slice(0, 8);
       if (cs.length) o.colors = cs;
     }
     return o;

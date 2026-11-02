@@ -1,0 +1,6 @@
+{
+  "name": "kalakriti-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shop editor API: reads and saves products.json and photos in the GitHub repo."
+}

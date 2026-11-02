@@ -19,6 +19,23 @@ h2{font:700 20px Georgia,serif;color:var(--maroon);margin:22px 4px 10px}
 .card{background:var(--card);border:1px solid var(--gold-l);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .ph{aspect-ratio:1/1;background:#f3e8d2;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:34px}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph.has{cursor:pointer;position:relative}
+.ph.has::after{content:"";position:absolute;right:8px;bottom:8px;width:26px;height:26px;border-radius:50%;background:rgba(109,26,43,.85) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M12 7v10M7 12h10'/%3E%3C/svg%3E") center/16px no-repeat;display:none}
+.ph.multi::after{display:block}
+.ph .nophoto{padding:12px;text-align:center;font:600 15px/1.25 Georgia,serif;color:var(--maroon);background:linear-gradient(135deg,#f6ecd2,#efe0bd);width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--gold-l)}
+#gal{position:fixed;inset:0;background:#1e0a0e;z-index:50;display:none;flex-direction:column}
+#gal.on{display:flex}
+#gal header{background:none;border:0;display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;color:#fff;text-align:left}
+#gal .t{font-weight:600;font-size:15px}
+#gal .c{font-size:13px;opacity:.8}
+#gx{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:28px;line-height:1;cursor:pointer;touch-action:manipulation}
+#gs{flex:1;min-height:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
+#gs::-webkit-scrollbar{display:none}
+#gs .sl{flex:0 0 100%;height:100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;padding:8px}
+#gs img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:8px}
+#gd{display:flex;justify-content:center;gap:8px;padding:14px}
+#gd i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35)}
+#gd i.on{background:var(--gold-l)}
 .body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
 .badge{align-self:flex-start;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px}
 .b-pre{background:#f6e6b4;color:#6a4b00}
@@ -66,22 +83,23 @@ const WHATSAPP_NUMBER   = "918448412211";   // country code + number, digits onl
 const UPI_ID            = "[xxx@upi]";      // TODO: your UPI ID (not shown on page; for your reference)
 const NOIDA_DELIVERY_FEE = 150;             // flat fee in rupees for Noida delivery
 const PRE_DIWALI_CUTOFF = "Sat 7 Nov 2026"; // shown on "Before Diwali" badges info line
-// photo: file in the photos/ folder. preDiwali: true = "Before Diwali", false = "Ships in 7-10 days"
+// Photos: put 1-5 files in photos/ named <code>-<n>.jpg (P-01-1.jpg, P-01-2.jpg ...). No other setting needed.
+// preDiwali: true = "Before Diwali", false = "Ships in 7-10 days"
 const PRODUCTS = [
-  {code:"C-01", name:"Wax-filled diyas, set of 6", price:199,  photo:"photos/C-01.jpg", preDiwali:true,  description:""},
-  {code:"C-02", name:"Soy jar candle 150g",        price:249,  photo:"photos/C-02.jpg", preDiwali:true,  description:""},
-  {code:"C-03", name:"Gel jar candle",             price:299,  photo:"photos/C-03.jpg", preDiwali:true,  description:""},
-  {code:"C-04", name:"Candle gift pair",           price:499,  photo:"photos/C-04.jpg", preDiwali:true,  description:""},
-  {code:"P-01", name:"Ganesha idol (gold)",        price:599,  photo:"photos/P-01.jpg", preDiwali:true,  description:""},
-  {code:"P-02", name:"Floral lantern with LED tealight", price:399, photo:"photos/P-02.jpg", preDiwali:true, description:""},
-  {code:"P-03", name:"Leaf lamp",                  price:1999, photo:"photos/P-03.jpg", preDiwali:false, description:""},
-  {code:"P-04", name:"Ribbed mushroom lamp",       price:999,  photo:"photos/P-04.jpg", preDiwali:false, description:""},
-  {code:"P-05", name:"Gold cube box",              price:799,  photo:"photos/P-05.jpg", preDiwali:false, description:""},
-  {code:"P-06", name:"Jewellery dish",             price:699,  photo:"photos/P-06.jpg", preDiwali:false, description:""},
-  {code:"P-07", name:"Spinning star top",          price:199,  photo:"photos/P-07.jpg", preDiwali:true,  description:""},
-  {code:"P-08", name:"Ballerina",                  price:499,  photo:"photos/P-08.jpg", preDiwali:false, description:""},
-  {code:"P-09", name:"Toy car",                    price:349,  photo:"photos/P-09.jpg", preDiwali:false, description:""},
-  {code:"P-10", name:"Infinity Torus desk fidget", price:599,  photo:"photos/P-10.jpg", preDiwali:false, description:""}
+  {code:"C-01", name:"Wax-filled diyas, set of 6", price:199,  preDiwali:true,  description:""},
+  {code:"C-02", name:"Soy jar candle 150g",        price:249,  preDiwali:true,  description:""},
+  {code:"C-03", name:"Gel jar candle",             price:299,  preDiwali:true,  description:""},
+  {code:"C-04", name:"Candle gift pair",           price:499,  preDiwali:true,  description:""},
+  {code:"P-01", name:"Ganesha idol (gold)",        price:599,  preDiwali:true,  description:""},
+  {code:"P-02", name:"Floral lantern with LED tealight", price:399, preDiwali:true, description:""},
+  {code:"P-03", name:"Leaf lamp",                  price:1999, preDiwali:false, description:""},
+  {code:"P-04", name:"Ribbed mushroom lamp",       price:999,  preDiwali:false, description:""},
+  {code:"P-05", name:"Gold cube box",              price:799,  preDiwali:false, description:""},
+  {code:"P-06", name:"Jewellery dish",             price:699,  preDiwali:false, description:""},
+  {code:"P-07", name:"Spinning star top",          price:199,  preDiwali:true,  description:""},
+  {code:"P-08", name:"Ballerina",                  price:499,  preDiwali:false, description:""},
+  {code:"P-09", name:"Toy car",                    price:349,  preDiwali:false, description:""},
+  {code:"P-10", name:"Infinity Torus desk fidget", price:599,  preDiwali:false, description:""}
 ];
 /* ================== END OF CONFIG ================================== */
 </script>
@@ -139,6 +157,12 @@ const PRODUCTS = [
   <div id="done" class="hide" role="status"></div>
 </main>
 
+<div id="gal" role="dialog" aria-modal="true" aria-label="Product photos">
+  <header><div><div class="t" id="gt"></div><div class="c" id="gc"></div></div><button type="button" id="gx" aria-label="Close photos">&times;</button></header>
+  <div id="gs"></div>
+  <div id="gd"></div>
+</div>
+
 <footer>Lanterns and lamps use LED lights only.</footer>
 
 <script>
@@ -157,11 +181,23 @@ const PRODUCTS = [
     c.className = "card";
     var ph = document.createElement("div");
     ph.className = "ph";
+    var np = document.createElement("div");
+    np.className = "nophoto"; np.textContent = p.name;
+    ph.appendChild(np);
     var img = new Image();
-    img.alt = p.name; img.loading = "lazy"; img.decoding = "async";
-    img.onerror = function(){ img.remove(); ph.textContent = "✨"; };
-    img.src = p.photo;
-    ph.appendChild(img);
+    img.alt = p.name; img.decoding = "async";
+    img.onload = function(){ np.remove(); ph.insertBefore(img, ph.firstChild); ph.className = "ph has";
+      ph.setAttribute("role","button"); ph.setAttribute("tabindex","0"); ph.setAttribute("aria-label","View photos of " + p.name);
+      ph.onclick = function(){ openGal(p, ph); };
+      ph.onkeydown = function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openGal(p, ph); } };
+      probeMore(p, ph); };
+    (function(img, ph, p){ // fetch the card photo only when the card is near the screen (saves mobile data)
+      var go = function(){ img.src = "photos/" + p.code + "-1.jpg"; };
+      if ("IntersectionObserver" in window){
+        var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ io.disconnect(); go(); } }, {rootMargin:"300px"});
+        io.observe(ph);
+      } else go();
+    })(img, ph, p);
     var b = document.createElement("div");
     b.className = "body";
     var badge = document.createElement("span");
@@ -183,6 +219,42 @@ const PRODUCTS = [
     c.appendChild(ph); c.appendChild(b);
     grid.appendChild(c);
   });
+
+  // ---- gallery ----
+  var gal = $("gal"), gs = $("gs"), gd = $("gd"), lastFocus = null;
+  function probeMore(p, ph){ // is there a 2nd photo? just a hint badge on the card
+    var t = new Image(); t.onload = function(){ ph.classList.add("multi"); };
+    t.src = "photos/" + p.code + "-2.jpg";
+  }
+  function openGal(p, from){
+    lastFocus = from; gs.innerHTML = ""; gd.innerHTML = "";
+    $("gt").textContent = p.name + " (" + p.code + ")";
+    var n = 0, pending = 5;
+    function refresh(){
+      var slides = gs.children;
+      $("gc").textContent = slides.length > 1 ? "Swipe for more · " + slides.length + " photos" : "";
+      gd.innerHTML = ""; for (var i = 0; i < slides.length && slides.length > 1; i++){ gd.appendChild(document.createElement("i")); }
+      dots();
+    }
+    for (var k = 1; k <= 5; k++) (function(k){
+      var sl = document.createElement("div"); sl.className = "sl"; sl.dataset.k = k;
+      var im = new Image(); im.alt = p.name + " photo " + k; im.decoding = "async";
+      im.onload = function(){ sl.appendChild(im); var kids = gs.children, at = null;
+        for (var j = 0; j < kids.length; j++){ if (+kids[j].dataset.k > k){ at = kids[j]; break; } }
+        gs.insertBefore(sl, at); refresh(); };
+      im.src = "photos/" + p.code + "-" + k + ".jpg";
+    })(k);
+    gal.classList.add("on"); document.body.style.overflow = "hidden"; $("gx").focus();
+  }
+  function dots(){
+    var w = gs.clientWidth || 1, i = Math.round(gs.scrollLeft / w), d = gd.children;
+    for (var j = 0; j < d.length; j++) d[j].className = j === i ? "on" : "";
+  }
+  gs.addEventListener("scroll", dots, {passive:true});
+  function closeGal(){ gal.classList.remove("on"); document.body.style.overflow = ""; gs.innerHTML = ""; if (lastFocus) lastFocus.focus(); }
+  $("gx").onclick = closeGal;
+  gal.addEventListener("click", function(e){ if (e.target === gal || e.target === gs || e.target.className === "sl") closeGal(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && gal.classList.contains("on")) closeGal(); });
 
   // ---- delivery option labels ----
   if (feeOk) $("noida-txt").innerHTML = "Noida delivery (+" + rsf(NOIDA_DELIVERY_FEE) + ")<small>Prepaid only</small>";

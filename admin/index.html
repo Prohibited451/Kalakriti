@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f3f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#140b15" media="(prefers-color-scheme: dark)">
 <title>Kalakriti - Shop editor</title>
 <style>
-:root{--bg:#faf5ee;--card:#fff;--line:#eee4d6;--ink:#2b1618;--mute:#7a5f5c;--accent:#7a1630;--on:#fff;--soft:rgba(122,22,48,.08);--gold:#c8922a;--err:#b3261e;--ok:#1f7a45}
-@media (prefers-color-scheme:dark){:root{--bg:#170c0f;--card:#251519;--line:#3b2529;--ink:#f8ece6;--mute:#c4a9a6;--accent:#e8b65a;--on:#2a1209;--soft:rgba(232,182,90,.14);--gold:#e8b65a;--err:#ff9a90;--ok:#6fd49a}}
+:root{--bg:#f4f3f7;--card:#fff;--line:#e7e4ec;--ink:#1d1520;--mute:#6b6170;--accent:#6b1533;--on:#fff;--soft:rgba(107,21,51,.07);--gold:#b8923a;--err:#b3261e;--ok:#1f7a45}
+@media (prefers-color-scheme:dark){:root{--bg:#140b15;--card:#1f1421;--line:#35263a;--ink:#f4eef3;--mute:#b9aab8;--accent:#d9b66a;--on:#241508;--soft:rgba(227,194,124,.14);--gold:#e3c27c;--err:#ff9a90;--ok:#6fd49a}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding-bottom:120px}
 .wrap{max-width:760px;margin:0 auto;padding:0 14px}
@@ -45,6 +47,14 @@ textarea{min-height:64px;resize:vertical}
 .bar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
 #msg{font-size:13.5px;font-weight:600;line-height:1.3}
 #msg.err{color:var(--err)}#msg.ok{color:var(--ok)}
+.crow{display:flex;align-items:center;gap:8px;margin-top:8px}
+.crow input[type=color]{width:52px;height:44px;padding:2px;border:1px solid var(--line);border-radius:12px;background:var(--bg);flex:none;cursor:pointer}
+.crow input[type=text]{flex:1;min-width:0}
+.crow .x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.pres{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pre{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px 0 8px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:13.5px;font-weight:700;cursor:pointer}
+.pre i{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.2);display:inline-block}
+.pre:disabled{opacity:.4;cursor:default}
 .hide{display:none!important}
 .center{text-align:center;padding:60px 0}
 a{color:var(--accent);font-weight:700}
@@ -81,6 +91,8 @@ a{color:var(--accent);font-weight:700}
 (function(){
   var $ = function(id){ return document.getElementById(id); };
   var state = {settings:{}, products:[]}, dirty = false, deletedCodes = [], open = {};
+  var PRESETS = [["Red","#c4162a"],["White","#f4f1ea"],["Gold","#c8922a"],["Black","#1d1a1a"],["Blue","#2456a6"],["Green","#2f8a4f"],["Pink","#e58aa6"],["Silver","#b8bcc2"],["Copper","#b5693c"],["Yellow","#f0c52a"],["Orange","#e8782a"],["Purple","#7a3fa0"],["Maroon","#7a1630"],["Brown","#6b4226"]];
+  var PRESET_HEX = {}; PRESETS.forEach(function(p){ PRESET_HEX[p[0].toLowerCase()] = p[1]; });
   var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
 
   function say(text, cls){ var m = $("msg"); m.textContent = text || ""; m.className = cls || ""; }
@@ -109,6 +121,11 @@ a{color:var(--accent);font-weight:700}
         var mine = names.filter(function(n){ return n.indexOf(p.code + "-") === 0 && /-[1-5]\.jpg$/.test(n); }).sort();
         p._photos = mine.map(function(n){ return {keep:n, url:"/photos/" + n + "?t=" + Date.now()}; });
         p._photosDirty = false;
+        p.colors = (p.colors || []).map(function(c){
+          var name = typeof c === "string" ? c : (c && c.name) || "";
+          var hex = (c && typeof c === "object" && c.hex) || PRESET_HEX[name.toLowerCase()] || "#9a9a9a";
+          return {name:name, hex:hex};
+        });
       });
       deletedCodes = []; render();
       $("app").classList.remove("hide"); $("bar").classList.remove("hide"); setDirty(false); say("");
@@ -159,22 +176,22 @@ a{color:var(--accent);font-weight:700}
       '<div><label for="c-' + uid + '">Code</label><input type="text" id="c-' + uid + '" maxlength="12"' + (p._new ? "" : " readonly") + '></div></div>' +
       '<label class="check"><input type="checkbox" id="d-' + uid + '"> Ready before Diwali</label>' +
       '<label for="sh-' + uid + '">Shipping text (optional, replaces the default, e.g. Ships in 1 day)</label><input type="text" id="sh-' + uid + '" maxlength="40">' +
-      '<label for="co-' + uid + '">Colours (optional, separated by commas)</label><input type="text" id="co-' + uid + '">' +
+      '<label>Colours (optional, shown to customers as swatches)</label><div id="cl-' + uid + '"></div>' +
       '<label for="ds-' + uid + '">Description (optional)</label><textarea id="ds-' + uid + '" maxlength="200"></textarea>' +
       '<label>Photos (first photo is the cover, up to 5)</label><div class="photos" id="ph-' + uid + '"></div>' +
       '<div class="tools"><button type="button" class="btn" data-a="up">Move up</button><button type="button" class="btn" data-a="down">Move down</button><button type="button" class="btn danger" data-a="del">Delete product</button></div>';
     var q = function(id){ return w.querySelector("#" + id + "-" + uid); };
-    var inp = {n:w.querySelector("#n-" + uid), p:w.querySelector("#p-" + uid), c:w.querySelector("#c-" + uid), d:w.querySelector("#d-" + uid), sh:w.querySelector("#sh-" + uid), co:w.querySelector("#co-" + uid), ds:w.querySelector("#ds-" + uid)};
+    var inp = {n:w.querySelector("#n-" + uid), p:w.querySelector("#p-" + uid), c:w.querySelector("#c-" + uid), d:w.querySelector("#d-" + uid), sh:w.querySelector("#sh-" + uid), ds:w.querySelector("#ds-" + uid)};
     inp.n.value = p.name || ""; inp.p.value = p.price || ""; inp.c.value = p.code || ""; inp.d.checked = !!p.preDiwali;
-    inp.sh.value = p.ship || ""; inp.co.value = (p.colors || []).join(", "); inp.ds.value = p.description || "";
+    inp.sh.value = p.ship || ""; inp.ds.value = p.description || "";
     inp.n.oninput = function(){ p.name = this.value; w.parentNode.querySelector(".head b").textContent = this.value || "New product"; setDirty(true); };
     inp.p.oninput = function(){ p.price = Math.round(Number(this.value)) || 0; setDirty(true); };
     inp.c.oninput = function(){ p.code = this.value.trim(); setDirty(true); };
     inp.d.onchange = function(){ p.preDiwali = this.checked; setDirty(true); };
     inp.sh.oninput = function(){ p.ship = this.value; setDirty(true); };
-    inp.co.oninput = function(){ p.colors = this.value.split(",").map(function(x){ return x.trim(); }).filter(Boolean); setDirty(true); };
     inp.ds.oninput = function(){ p.description = this.value; setDirty(true); };
     renderPhotos(p, w.querySelector("#ph-" + uid));
+    renderColors(p, w.querySelector("#cl-" + uid));
     w.querySelector('[data-a="up"]').onclick = function(){ move(i, -1); };
     w.querySelector('[data-a="down"]').onclick = function(){ move(i, 1); };
     w.querySelector('[data-a="del"]').onclick = function(){
@@ -186,6 +203,36 @@ a{color:var(--accent);font-weight:700}
   }
 
   function move(i, d){ var j = i + d; if (j < 0 || j >= state.products.length) return; var t = state.products[i]; state.products[i] = state.products[j]; state.products[j] = t; setDirty(true); renderList(); }
+
+  function renderColors(p, box){
+    box.innerHTML = "";
+    p.colors = p.colors || [];
+    p.colors.forEach(function(col, k){
+      var r = document.createElement("div"); r.className = "crow";
+      r.innerHTML = '<input type="color" aria-label="Pick colour ' + (k + 1) + '"><input type="text" maxlength="20" placeholder="Colour name" aria-label="Name of colour ' + (k + 1) + '"><button type="button" class="x" aria-label="Remove colour ' + (k + 1) + '">&times;</button>';
+      var pick = r.children[0], nm = r.children[1], x = r.children[2];
+      pick.value = col.hex || "#9a9a9a"; nm.value = col.name || "";
+      pick.oninput = function(){ col.hex = this.value; setDirty(true); };
+      nm.oninput = function(){ col.name = this.value; setDirty(true); };
+      x.onclick = function(){ p.colors.splice(k, 1); setDirty(true); renderColors(p, box); };
+      box.appendChild(r);
+    });
+    var full = p.colors.length >= 8;
+    var pres = document.createElement("div"); pres.className = "pres";
+    PRESETS.forEach(function(pr){
+      var b = document.createElement("button"); b.type = "button"; b.className = "pre"; b.disabled = full;
+      b.innerHTML = '<i style="background:' + pr[1] + '"></i>' + pr[0];
+      b.onclick = function(){
+        if (p.colors.some(function(c){ return (c.name || "").toLowerCase() === pr[0].toLowerCase(); })) return;
+        p.colors.push({name:pr[0], hex:pr[1]}); setDirty(true); renderColors(p, box);
+      };
+      pres.appendChild(b);
+    });
+    var cu = document.createElement("button"); cu.type = "button"; cu.className = "pre"; cu.disabled = full; cu.textContent = "+ Custom colour";
+    cu.onclick = function(){ p.colors.push({name:"", hex:"#c4162a"}); setDirty(true); renderColors(p, box); var ins = box.querySelectorAll(".crow input[type=text]"); if (ins.length) ins[ins.length - 1].focus(); };
+    pres.appendChild(cu);
+    box.appendChild(pres);
+  }
 
   function renderPhotos(p, box){
     box.innerHTML = "";
@@ -255,7 +302,7 @@ a{color:var(--accent);font-weight:700}
       products: state.products.map(function(p){
         var o = {code:p.code, name:p.name.trim(), price:p.price, preDiwali:!!p.preDiwali, description:(p.description || "").trim()};
         if ((p.ship || "").trim()) o.ship = p.ship.trim();
-        if (p.colors && p.colors.length) o.colors = p.colors;
+        if (p.colors && p.colors.length) o.colors = p.colors.map(function(c){ return {name:c.name.trim(), hex:c.hex}; });
         return o;
       }),
       photos: photos
@@ -282,6 +329,7 @@ a{color:var(--accent);font-weight:700}
       seen[p.code] = 1;
       if (!(p.name || "").trim()) return "Every product needs a name.";
       if (!(p.price > 0)) return label + ": add a price.";
+      for (var k = 0; k < (p.colors || []).length; k++){ if (!(p.colors[k].name || "").trim()) return label + ": every colour needs a name."; }
     }
     return "";
   }

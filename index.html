@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f3f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#140b15" media="(prefers-color-scheme: dark)">
 <title>Kalakriti - Order</title>
 <meta name="description" content="Handmade candles, diyas and 3D-printed decor from Kalakriti, Noida.">
 <style>
@@ -12,23 +14,23 @@
 @font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/pjs-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 /* Design: flat and clean. Solid colours, hairline borders, no blur or glow. Radii: 22px cards and panels, 16px inputs, pills for buttons and chips. */
 :root{
-  --ink:#2b1618;--mute:#7a5f5c;--line:rgba(122,22,48,.12);
-  --glass:#ffffff;--glass-edge:#eee4d6;--glass-strong:#ffffff;
-  --accent:#7a1630;--on-accent:#fff;--accent-solid:#7a1630;--accent-soft:rgba(122,22,48,.09);
-  --gold:#c8922a;--gold-ink:#7a520a;--gold-soft:rgba(240,200,110,.35);
-  --ph1:#f6ead9;--ph2:#f0dfcb;--err:#b3261e;
-  --shadow:0 1px 2px rgba(60,30,20,.05);
-  --page:#faf5ee;
+  --ink:#1d1520;--mute:#6b6170;--line:rgba(29,21,32,.10);
+  --glass:#ffffff;--glass-edge:#e7e4ec;--glass-strong:#ffffff;
+  --accent:#6b1533;--on-accent:#fff;--accent-solid:#6b1533;--accent-soft:rgba(107,21,51,.07);
+  --gold:#b8923a;--gold-ink:#6a4f12;--gold-soft:rgba(201,167,92,.20);
+  --ph1:#efecf2;--ph2:#e4dfea;--err:#b3261e;
+  --shadow:0 1px 2px rgba(29,21,32,.05);
+  --page:#f4f3f7;
   --glowA:transparent;--glowB:transparent;--glowC:transparent;
 }
 @media (prefers-color-scheme:dark){:root{
-  --ink:#f8ece6;--mute:#c4a9a6;--line:rgba(255,255,255,.12);
-  --glass:#251519;--glass-edge:#3b2529;--glass-strong:#251519;
-  --accent:#e8b65a;--on-accent:#2a1209;--accent-solid:#f0c066;--accent-soft:rgba(240,192,102,.14);
-  --gold:#f0c066;--gold-ink:#f6d99a;--gold-soft:rgba(240,192,102,.16);
-  --ph1:#3a2227;--ph2:#2e1a1e;--err:#ff9a90;
+  --ink:#f4eef3;--mute:#b9aab8;--line:rgba(255,255,255,.12);
+  --glass:#1f1421;--glass-edge:#35263a;--glass-strong:#1f1421;
+  --accent:#d9b66a;--on-accent:#241508;--accent-solid:#e3c27c;--accent-soft:rgba(227,194,124,.14);
+  --gold:#e3c27c;--gold-ink:#efd9a4;--gold-soft:rgba(227,194,124,.15);
+  --ph1:#2e1f33;--ph2:#251829;--err:#ff9a90;
   --shadow:none;
-  --page:#170c0f;
+  --page:#140b15;
   --glowA:transparent;--glowB:transparent;--glowC:transparent;
 }}
 *{box-sizing:border-box}
@@ -85,6 +87,9 @@ button,input,textarea{font:inherit;color:inherit}
 .colors{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .sw{min-height:44px;padding:0 14px;border-radius:99px;border:1px solid var(--glass-edge);background:var(--glass);font-weight:700;font-size:13.5px;cursor:pointer;touch-action:manipulation}
 .sw[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.sw.dot{width:44px;height:44px;padding:0;border-radius:50%;border:1px solid var(--glass-edge);box-shadow:inset 0 0 0 2px var(--glass)}
+.sw.dot[aria-pressed=true]{border:2px solid var(--accent);box-shadow:inset 0 0 0 3px var(--glass)}
+.csel{width:100%;font-size:12.5px;font-weight:700;color:var(--mute);margin-top:2px}
 .cerr{font-size:12.5px;color:var(--err);font-weight:700;margin-top:6px}
 .cerr:empty{display:none}
 .hide{display:none!important}
@@ -134,7 +139,7 @@ footer{text-align:center;color:var(--mute);font-size:13.5px;padding:28px 16px 12
 #cart a{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:99px;background:var(--accent);color:var(--on-accent);font-weight:800;text-decoration:none}
 
 /* gallery */
-#gal{position:fixed;inset:0;background:#150a0d;z-index:50;display:none;flex-direction:column}
+#gal{position:fixed;inset:0;background:#130a14;z-index:50;display:none;flex-direction:column}
 #gal.on{display:flex}
 #gal header{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 18px;color:#fff}
 #gal .t{font-weight:700;font-size:15px}
@@ -169,7 +174,7 @@ let SHIP_DAYS         = "3-6 days";       // default delivery time shown on item
 // Items without a photo are shown at the bottom automatically.
 // preDiwali: true = badge "Before Diwali", false = badge "Ships in <SHIP_DAYS>"
 // Optional per product:  ship:"Ships in 1 day"  (replaces the badge text)
-//                        colors:["Red","Gold"]  (customer must pick one; it is added to the item name in the order)
+//                        colors:[{name:"Red",hex:"#c4162a"}]  (customer must pick one; the name is added to the item name in the order)
 let PRODUCTS = [
   {code:"C-01", name:"Wax-filled diyas, set of 6", price:199,  preDiwali:true,  description:""},
   {code:"C-02", name:"Soy jar candle 150g",        price:249,  preDiwali:true,  description:""},
@@ -182,7 +187,7 @@ let PRODUCTS = [
   {code:"P-05", name:"Gold cube lamp",             price:799,  preDiwali:false, description:""},
   {code:"P-06", name:"Jewellery dish",             price:699,  preDiwali:false, description:""},
   {code:"P-07", name:"Spinning star top",          price:199,  preDiwali:true,  description:""},
-  {code:"P-08", name:"Ballerina",                  price:499,  preDiwali:true,  description:"", ship:"Ships in 1 day", colors:["Red","White","Gold"]},
+  {code:"P-08", name:"Ballerina",                  price:499,  preDiwali:true,  description:"", ship:"Ships in 1 day", colors:[{name:"Red",hex:"#c4162a"},{name:"White",hex:"#f4f1ea"},{name:"Gold",hex:"#c8922a"}]},
   {code:"P-09", name:"Toy car",                    price:349,  preDiwali:false, description:""},
   {code:"P-10", name:"Infinity Torus lamp",       price:599,  preDiwali:false, description:""}
 ];
@@ -283,6 +288,14 @@ let PRODUCTS = [
     return withTimeout(fetch("products.json", {cache:"no-cache"}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }), 2500);
   }
   function str(v, max){ return typeof v === "string" && v.length <= max ? v : null; }
+  // A colour is {name, hex}. A plain string is still accepted (name only, no swatch).
+  function normColor(c){
+    if (typeof c === "string"){ var n = c.trim(); return n && n.length <= 20 ? {name:n, hex:null} : null; }
+    if (c && typeof c === "object" && str(c.name, 20) && c.name.trim()){
+      return {name:c.name.trim(), hex:(typeof c.hex === "string" && /^#[0-9a-fA-F]{6}$/.test(c.hex)) ? c.hex.toLowerCase() : null};
+    }
+    return null;
+  }
   function applyData(d){
     if (!d || typeof d !== "object") return;
     var st = d.settings || {};
@@ -299,7 +312,7 @@ let PRODUCTS = [
         seen[p.code] = 1;
         var o = {code:p.code, name:name.trim(), price:Math.round(price), preDiwali:p.preDiwali === true, description:str(p.description, 200) || ""};
         if (str(p.ship, 40) && p.ship.trim()) o.ship = p.ship.trim();
-        if (Array.isArray(p.colors)){ var cs = p.colors.filter(function(c){ return str(c, 20) && c.trim(); }).map(function(c){ return c.trim(); }).slice(0, 8); if (cs.length) o.colors = cs; }
+        if (Array.isArray(p.colors)){ var cs = p.colors.map(normColor).filter(Boolean).slice(0, 8); if (cs.length) o.colors = cs; }
         list.push(o);
       });
       if (list.length) PRODUCTS = list;
@@ -356,11 +369,14 @@ let PRODUCTS = [
     var cerr = document.createElement("div"); cerr.className = "cerr"; cerr.setAttribute("role","alert");
     if (p.colors && p.colors.length){
       var cw = document.createElement("div"); cw.className = "colors"; cw.setAttribute("role","group"); cw.setAttribute("aria-label","Colour for " + p.name);
-      p.colors.forEach(function(nameC){
-        var sw = document.createElement("button"); sw.type = "button"; sw.className = "sw"; sw.textContent = nameC; sw.setAttribute("aria-pressed","false");
-        sw.onclick = function(){ color[p.code] = nameC; cerr.textContent = "";
-          Array.prototype.forEach.call(cw.children, function(x){ x.setAttribute("aria-pressed", x === sw ? "true" : "false"); }); upd(); };
+      var csel = document.createElement("div"); csel.className = "csel"; csel.textContent = "Choose a colour";
+      p.colors.forEach(function(col){
+        var sw = document.createElement("button"); sw.type = "button"; sw.className = "sw" + (col.hex ? " dot" : ""); sw.setAttribute("aria-pressed","false");
+        if (col.hex){ sw.style.background = col.hex; sw.setAttribute("aria-label", col.name); sw.title = col.name; } else sw.textContent = col.name;
+        sw.onclick = function(){ color[p.code] = col.name; cerr.textContent = ""; csel.textContent = "Colour: " + col.name;
+          Array.prototype.forEach.call(cw.querySelectorAll(".sw"), function(x){ x.setAttribute("aria-pressed", x === sw ? "true" : "false"); }); upd(); };
         cw.appendChild(sw); });
+      cw.appendChild(csel);
       b.appendChild(cw);
     }
     b.appendChild(cerr);

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalakriti - Order</title>
+<meta name="description" content="Handmade candles, diyas and 3D-printed decor from Kalakriti, Noida.">
+<style>
+:root{--cream:#fff8ec;--card:#fffdf8;--maroon:#6d1a2b;--maroon-d:#4e1120;--gold:#b88a2a;--gold-l:#e9d3a0;--ink:#2b1a1a;--mute:#7a6a62;--err:#b3261e}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--maroon);color:#fff;text-align:center;padding:20px 16px;border-bottom:4px solid var(--gold)}
+header h1{margin:0;font:700 26px Georgia,serif;letter-spacing:.5px;color:var(--gold-l)}
+header p{margin:4px 0 0;font-size:14px;opacity:.9}
+main{max-width:720px;margin:0 auto;padding:16px 12px 40px}
+h2{font:700 20px Georgia,serif;color:var(--maroon);margin:22px 4px 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:var(--card);border:1px solid var(--gold-l);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.ph{aspect-ratio:1/1;background:#f3e8d2;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:34px}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.badge{align-self:flex-start;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.b-pre{background:#f6e6b4;color:#6a4b00}
+.b-ship{background:#eadfe1;color:var(--maroon)}
+.name{font-weight:600;font-size:15px;line-height:1.25}
+.code{font-size:12px;color:var(--mute)}
+.desc{font-size:12.5px;color:var(--mute)}
+.price{font-weight:700;color:var(--maroon);font-size:16px;margin-top:auto}
+.step{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.step button{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--maroon);background:#fff;color:var(--maroon);font-size:24px;line-height:1;cursor:pointer;touch-action:manipulation}
+.step button:active{background:var(--maroon);color:#fff}
+.step output{min-width:28px;text-align:center;font-weight:700;font-size:18px}
+form{background:var(--card);border:1px solid var(--gold-l);border-radius:12px;padding:14px}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+input[type=text],input[type=tel],textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid #d8c9a8;border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1.5px solid #d8c9a8;border-radius:10px;margin-top:8px;background:#fff;min-height:48px;font-weight:500;font-size:15px;margin-bottom:0}
+.opt input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--maroon);flex:none}
+.opt small{display:block;color:var(--mute);font-weight:400}
+.opt.dis{opacity:.5}
+.opt.sel{border-color:var(--maroon);background:#fbf0ec}
+.hide{display:none}
+.err{color:var(--err);font-size:13px;margin-top:4px;min-height:0}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:12px;border-top:2px solid var(--gold-l);font-size:15px}
+.total strong{font:700 26px Georgia,serif;color:var(--maroon)}
+.lines{font-size:13.5px;color:var(--mute);margin-top:10px}
+.lines div{display:flex;justify-content:space-between;gap:8px}
+#go{width:100%;margin-top:16px;min-height:54px;border:0;border-radius:12px;background:var(--maroon);color:#fff;font-size:17px;font-weight:700;cursor:pointer;border-bottom:3px solid var(--gold);touch-action:manipulation}
+#go:active{background:var(--maroon-d)}
+#done{margin-top:16px;padding:14px;border-radius:12px;background:#f6ecc9;border:1.5px solid var(--gold);font-weight:600}
+#done p{margin:0 0 8px}#done p:last-child{margin:0}
+#done a{color:var(--maroon)}
+footer{text-align:center;color:var(--mute);font-size:13px;padding:0 16px 28px}
+</style>
+</head>
+<body>
+
+<script>
+/* ===================================================================
+   CONFIG - EDIT THIS BLOCK ONLY. Everything below it is page code.
+   =================================================================== */
+const WHATSAPP_NUMBER   = "918448412211";   // country code + number, digits only
+const UPI_ID            = "[xxx@upi]";      // TODO: your UPI ID (not shown on page; for your reference)
+const NOIDA_DELIVERY_FEE = 150;             // flat fee in rupees for Noida delivery
+const PRE_DIWALI_CUTOFF = "Sat 7 Nov 2026"; // shown on "Before Diwali" badges info line
+// photo: file in the photos/ folder. preDiwali: true = "Before Diwali", false = "Ships in 7-10 days"
+const PRODUCTS = [
+  {code:"C-01", name:"Wax-filled diyas, set of 6", price:199,  photo:"photos/C-01.jpg", preDiwali:true,  description:""},
+  {code:"C-02", name:"Soy jar candle 150g",        price:249,  photo:"photos/C-02.jpg", preDiwali:true,  description:""},
+  {code:"C-03", name:"Gel jar candle",             price:299,  photo:"photos/C-03.jpg", preDiwali:true,  description:""},
+  {code:"C-04", name:"Candle gift pair",           price:499,  photo:"photos/C-04.jpg", preDiwali:true,  description:""},
+  {code:"P-01", name:"Ganesha idol (gold)",        price:599,  photo:"photos/P-01.jpg", preDiwali:true,  description:""},
+  {code:"P-02", name:"Floral lantern with LED tealight", price:399, photo:"photos/P-02.jpg", preDiwali:true, description:""},
+  {code:"P-03", name:"Leaf lamp",                  price:1999, photo:"photos/P-03.jpg", preDiwali:false, description:""},
+  {code:"P-04", name:"Ribbed mushroom lamp",       price:999,  photo:"photos/P-04.jpg", preDiwali:false, description:""},
+  {code:"P-05", name:"Gold cube box",              price:799,  photo:"photos/P-05.jpg", preDiwali:false, description:""},
+  {code:"P-06", name:"Jewellery dish",             price:699,  photo:"photos/P-06.jpg", preDiwali:false, description:""},
+  {code:"P-07", name:"Spinning star top",          price:199,  photo:"photos/P-07.jpg", preDiwali:true,  description:""},
+  {code:"P-08", name:"Ballerina",                  price:499,  photo:"photos/P-08.jpg", preDiwali:false, description:""},
+  {code:"P-09", name:"Toy car",                    price:349,  photo:"photos/P-09.jpg", preDiwali:false, description:""},
+  {code:"P-10", name:"Infinity Torus desk fidget", price:599,  photo:"photos/P-10.jpg", preDiwali:false, description:""}
+];
+/* ================== END OF CONFIG ================================== */
+</script>
+
+<header>
+  <h1>Kalakriti</h1>
+  <p>Handmade candles, diyas &amp; 3D-printed d&eacute;cor &middot; Noida</p>
+</header>
+
+<main>
+  <h2>Pick your items</h2>
+  <div class="grid" id="grid"></div>
+
+  <h2>Your details</h2>
+  <form id="f" novalidate autocomplete="off" onsubmit="return false">
+    <label for="name">Name *</label>
+    <input type="text" id="name" maxlength="60" autocomplete="off">
+    <div class="err" id="e-name"></div>
+
+    <label for="phone">Your WhatsApp number *</label>
+    <input type="tel" id="phone" inputmode="numeric" maxlength="16" placeholder="10-digit mobile number" autocomplete="off">
+    <div class="err" id="e-phone"></div>
+
+    <label>Delivery *</label>
+    <label class="opt sel" id="o-Pickup"><input type="radio" name="dt" value="Pickup" checked><span>Stall pickup</span></label>
+    <label class="opt" id="o-Society"><input type="radio" name="dt" value="Society"><span>Society flat delivery (free)</span></label>
+    <label class="opt" id="o-Noida"><input type="radio" name="dt" value="Noida"><span id="noida-txt">Noida delivery<small>Prepaid only</small></span></label>
+
+    <div id="soc" class="hide">
+      <label for="tower">Tower *</label>
+      <input type="text" id="tower" maxlength="20" autocomplete="off">
+      <label for="flat">Flat number *</label>
+      <input type="text" id="flat" maxlength="20" autocomplete="off">
+      <div class="err" id="e-soc"></div>
+    </div>
+    <div id="noi" class="hide">
+      <label for="addr">Full address *</label>
+      <textarea id="addr" maxlength="250" autocomplete="off"></textarea>
+      <label for="pin">Pincode *</label>
+      <input type="text" id="pin" inputmode="numeric" maxlength="6" autocomplete="off">
+      <div class="err" id="e-noi"></div>
+    </div>
+
+    <label for="notes">Notes (optional)</label>
+    <textarea id="notes" maxlength="200" placeholder="Custom name, colour, etc." autocomplete="off"></textarea>
+
+    <div class="lines" id="lines"></div>
+    <div class="total"><span>Total</span><strong id="total">&#8377;0</strong></div>
+    <div class="note hide" id="mixnote"></div>
+    <div class="err" id="e-cart"></div>
+
+    <button type="button" id="go">Place order on WhatsApp</button>
+  </form>
+
+  <div id="done" class="hide" role="status"></div>
+</main>
+
+<footer>Lanterns and lamps use LED lights only.</footer>
+
+<script>
+(function(){
+  var qty = {};
+  var $ = function(id){return document.getElementById(id)};
+  var rs = function(n){return "₹" + n};
+  var rsf = function(n){return "₹" + n.toLocaleString("en-IN")};
+  var feeOk = typeof NOIDA_DELIVERY_FEE === "number" && NOIDA_DELIVERY_FEE >= 0;
+
+  // ---- grid ----
+  var grid = $("grid");
+  PRODUCTS.forEach(function(p){
+    qty[p.code] = 0;
+    var c = document.createElement("div");
+    c.className = "card";
+    var ph = document.createElement("div");
+    ph.className = "ph";
+    var img = new Image();
+    img.alt = p.name; img.loading = "lazy"; img.decoding = "async";
+    img.onerror = function(){ img.remove(); ph.textContent = "✨"; };
+    img.src = p.photo;
+    ph.appendChild(img);
+    var b = document.createElement("div");
+    b.className = "body";
+    var badge = document.createElement("span");
+    badge.className = "badge " + (p.preDiwali ? "b-pre" : "b-ship");
+    badge.textContent = p.preDiwali ? "Before Diwali" : "Ships in 7-10 days";
+    var nm = document.createElement("div"); nm.className = "name"; nm.textContent = p.name;
+    var cd = document.createElement("div"); cd.className = "code"; cd.textContent = p.code;
+    b.appendChild(badge); b.appendChild(nm); b.appendChild(cd);
+    if (p.description){ var d = document.createElement("div"); d.className = "desc"; d.textContent = p.description; b.appendChild(d); }
+    var pr = document.createElement("div"); pr.className = "price"; pr.textContent = rsf(p.price); b.appendChild(pr);
+    var st = document.createElement("div"); st.className = "step";
+    var m = document.createElement("button"); m.type = "button"; m.textContent = "−"; m.setAttribute("aria-label","Remove one " + p.name);
+    var o = document.createElement("output"); o.id = "q-" + p.code; o.textContent = "0";
+    var a = document.createElement("button"); a.type = "button"; a.textContent = "+"; a.setAttribute("aria-label","Add one " + p.name);
+    m.onclick = function(){ if (qty[p.code] > 0){ qty[p.code]--; upd(); } };
+    a.onclick = function(){ if (qty[p.code] < 20){ qty[p.code]++; upd(); } };
+    st.appendChild(m); st.appendChild(o); st.appendChild(a);
+    b.appendChild(st);
+    c.appendChild(ph); c.appendChild(b);
+    grid.appendChild(c);
+  });
+
+  // ---- delivery option labels ----
+  if (feeOk) $("noida-txt").innerHTML = "Noida delivery (+" + rsf(NOIDA_DELIVERY_FEE) + ")<small>Prepaid only</small>";
+  else {
+    $("noida-txt").innerHTML = "Noida delivery<small>Not available yet</small>";
+    document.querySelector('input[value="Noida"]').disabled = true;
+    $("o-Noida").classList.add("dis");
+  }
+
+  function dtype(){ return document.querySelector('input[name="dt"]:checked').value; }
+  function fee(){ return dtype() === "Noida" && feeOk ? NOIDA_DELIVERY_FEE : 0; }
+  function subtotal(){ return PRODUCTS.reduce(function(s,p){return s + p.price * qty[p.code]}, 0); }
+
+  function upd(){
+    PRODUCTS.forEach(function(p){ $("q-" + p.code).textContent = qty[p.code]; });
+    var dt = dtype();
+    ["Pickup","Society","Noida"].forEach(function(k){ $("o-" + k).classList.toggle("sel", k === dt); });
+    $("soc").classList.toggle("hide", dt !== "Society");
+    $("noi").classList.toggle("hide", dt !== "Noida");
+    var lines = "", sub = subtotal(), any = false, pre = false, late = false;
+    PRODUCTS.forEach(function(p){
+      if (qty[p.code]){ any = true; if (p.preDiwali) pre = true; else late = true;
+        lines += "<div><span>" + esc(p.name) + " ×" + qty[p.code] + "</span><span>" + rsf(p.price * qty[p.code]) + "</span></div>"; }
+    });
+    if (fee()) lines += "<div><span>Noida delivery</span><span>" + rsf(fee()) + "</span></div>";
+    $("lines").innerHTML = lines;
+    $("total").textContent = rsf(sub + fee());
+    var mn = $("mixnote");
+    if (pre && late){ mn.textContent = "Your order has items for before Diwali (by " + PRE_DIWALI_CUTOFF + ") and items that ship in 7-10 days."; mn.classList.remove("hide"); }
+    else mn.classList.add("hide");
+  }
+  function esc(s){ return s.replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
+
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="dt"]'), function(r){ r.onchange = upd; });
+
+  // ---- message ----
+  function clean(s){ return String(s || "").replace(/[\r\n\t]+/g, " ").replace(/[|;]/g, ",").replace(/\s+/g, " ").trim(); }
+  function makeId(){
+    var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", t = Date.now().toString(36).toUpperCase().slice(-3), r = "";
+    var buf = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(3)) : [Math.random()*256, Math.random()*256, Math.random()*256];
+    for (var i = 0; i < 3; i++) r += chars.charAt(Math.floor(buf[i]) % chars.length);
+    return "KK-" + t + r;
+  }
+  function phoneDigits(v){
+    var d = String(v).replace(/\D/g, "");
+    if (d.length === 12 && d.indexOf("91") === 0) d = d.slice(2);
+    else if (d.length === 11 && d.charAt(0) === "0") d = d.slice(1);
+    return /^[6-9]\d{9}$/.test(d) ? d : "";
+  }
+  function build(){
+    var errs = {cart:"", name:"", phone:"", soc:"", noi:""}, ok = true;
+    var dt = dtype();
+    if (!subtotal()){ errs.cart = "Please add at least one item."; ok = false; }
+    var name = clean($("name").value);
+    if (!name){ errs.name = "Please enter your name."; ok = false; }
+    var phone = phoneDigits($("phone").value);
+    if (!phone){ errs.phone = "Enter a valid 10-digit mobile number."; ok = false; }
+    var addr = "-";
+    if (dt === "Pickup") addr = "Stall";
+    if (dt === "Society"){
+      var tw = clean($("tower").value), fl = clean($("flat").value);
+      if (!tw || !fl){ errs.soc = "Tower and flat number are required."; ok = false; }
+      addr = "Tower " + tw + ", Flat " + fl;
+    }
+    if (dt === "Noida"){
+      var ad = clean($("addr").value), pin = $("pin").value.replace(/\s/g, "");
+      if (!ad || !/^\d{6}$/.test(pin)){ errs.noi = "Full address and a 6-digit pincode are required."; ok = false; }
+      addr = ad + ", " + pin;
+    }
+    $("e-cart").textContent = errs.cart; $("e-name").textContent = errs.name; $("e-phone").textContent = errs.phone;
+    $("e-soc").textContent = errs.soc; $("e-noi").textContent = errs.noi;
+    if (!ok) return null;
+    var items = PRODUCTS.filter(function(p){return qty[p.code]}).map(function(p){
+      return p.code + " " + p.name + " x" + qty[p.code] + " = " + rs(p.price * qty[p.code]);
+    }).join("; ");
+    var id = makeId();
+    var msg = "ORDER " + id + "\n" +
+      "Items: " + items + "\n" +
+      "Delivery: " + dt + " | " + addr + "\n" +
+      "Total: " + rs(subtotal() + fee()) + "\n" +
+      "Name: " + name + " | Phone: " + phone + "\n" +
+      "Notes: " + (clean($("notes").value) || "-");
+    return {msg: msg, dt: dt};
+  }
+
+  $("go").onclick = function(){
+    var r = build();
+    if (!r){
+      var first = document.querySelector(".err:not(:empty)");
+      if (first && first.scrollIntoView) first.scrollIntoView({block:"center", behavior:"smooth"});
+      return;
+    }
+    var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(r.msg);
+    var d = $("done");
+    d.innerHTML = "<p>Send the WhatsApp message to confirm. We'll reply with UPI payment details.</p>" +
+      (r.dt === "Noida" ? "<p>Payment is required before dispatch.</p>" : "") +
+      '<p><a id="again" href="' + url + '" target="_blank" rel="noopener">WhatsApp didn’t open? Tap here</a></p>';
+    d.classList.remove("hide");
+    window.open(url, "_blank");
+    if (d.scrollIntoView) d.scrollIntoView({block:"center", behavior:"smooth"});
+  };
+
+  upd();
+})();
+</script>
+</body>
+</html>

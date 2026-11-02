@@ -2,75 +2,130 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>Kalakriti - Order</title>
 <meta name="description" content="Handmade candles, diyas and 3D-printed decor from Kalakriti, Noida.">
 <style>
-:root{--cream:#fff8ec;--card:#fffdf8;--maroon:#6d1a2b;--maroon-d:#4e1120;--gold:#b88a2a;--gold-l:#e9d3a0;--ink:#2b1a1a;--mute:#7a6a62;--err:#b3261e}
+/* Design: cream, maroon and gold. Corners: 14px for cards, inputs and buttons; pills for chips and badges. */
+:root{
+  --bg:#fbf5ea;--surface:#fffdf8;--ink:#2a1a17;--mute:#74625a;--line:#eadfc9;
+  --accent:#6b1526;--on-accent:#ffffff;--accent-soft:#f4e4e1;--gold:#a8791f;--gold-soft:#f3e6c0;--gold-ink:#6b4a05;
+  --ph1:#f6ecd2;--ph2:#ecdcb4;--err:#b3261e;--shadow:0 1px 2px rgba(80,40,20,.06),0 8px 24px -12px rgba(80,40,20,.18);
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1c0f11;--surface:#291619;--ink:#f6ebdc;--mute:#b8a496;--line:#43272b;
+  --accent:#e0ae52;--on-accent:#2a1209;--accent-soft:#3a2024;--gold:#e0ae52;--gold-soft:#463315;--gold-ink:#f0cf8c;
+  --ph1:#3a2226;--ph2:#2c191c;--err:#ff8a80;--shadow:0 8px 24px -12px rgba(0,0,0,.6);
+}}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-header{background:var(--maroon);color:#fff;text-align:center;padding:20px 16px;border-bottom:4px solid var(--gold)}
-header h1{margin:0;font:700 26px Georgia,serif;letter-spacing:.5px;color:var(--gold-l)}
-header p{margin:4px 0 0;font-size:14px;opacity:.9}
-main{max-width:720px;margin:0 auto;padding:16px 12px 40px}
-h2{font:700 20px Georgia,serif;color:var(--maroon);margin:22px 4px 10px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:var(--card);border:1px solid var(--gold-l);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
-.ph{aspect-ratio:1/1;background:#f3e8d2;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:34px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+/* top */
+.top{padding:28px 0 18px}
+.brand{font-weight:800;font-size:34px;letter-spacing:-.02em;line-height:1;color:var(--accent)}
+.top .tag{margin:8px 0 0;color:var(--mute);font-size:15px}
+.facts{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0}
+.facts li{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600}
+.cutoff{margin:14px 0 0;font-size:13.5px;color:var(--gold-ink);background:var(--gold-soft);border-radius:var(--r);padding:10px 12px}
+
+/* filters */
+.bar{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 16px;margin:0 -16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:44px;padding:0 16px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);font-weight:600;font-size:14.5px;cursor:pointer;touch-action:manipulation}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+/* grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 0 8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.ph{position:relative;aspect-ratio:4/5;background:linear-gradient(160deg,var(--ph1),var(--ph2));display:flex;align-items:center;justify-content:center;overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
-.ph.has{cursor:pointer;position:relative}
-.ph.has::after{content:"";position:absolute;right:8px;bottom:8px;width:26px;height:26px;border-radius:50%;background:rgba(109,26,43,.85) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M12 7v10M7 12h10'/%3E%3C/svg%3E") center/16px no-repeat;display:none}
-.ph.multi::after{display:block}
-.ph .nophoto{padding:12px;text-align:center;font:600 15px/1.25 Georgia,serif;color:var(--maroon);background:linear-gradient(135deg,#f6ecd2,#efe0bd);width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--gold-l)}
-#gal{position:fixed;inset:0;background:#1e0a0e;z-index:50;display:none;flex-direction:column}
+.ph.has{cursor:pointer}
+.ph .nophoto{padding:14px;text-align:center;font-weight:700;font-size:15px;line-height:1.25;color:var(--accent)}
+.ph .more{position:absolute;right:8px;bottom:8px;background:rgba(30,12,14,.72);color:#fff;font-size:12px;font-weight:600;padding:4px 9px;border-radius:99px;display:none}
+.ph.multi .more{display:block}
+.info{padding:12px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1}
+.badge{font-size:12px;font-weight:700;color:var(--gold-ink)}
+.badge.ship{color:var(--mute);font-weight:600}
+.name{font-weight:650;font-size:15px;line-height:1.25}
+.code{font-size:12px;color:var(--mute)}
+.desc{font-size:13px;color:var(--mute)}
+.price{font-weight:800;font-size:18px;margin-top:6px}
+.ctl{margin-top:8px}
+.add{width:100%;min-height:44px;border-radius:var(--r);border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-weight:700;cursor:pointer;touch-action:manipulation}
+.add:active{background:var(--accent);color:var(--on-accent)}
+.step{display:flex;align-items:center;justify-content:space-between;background:var(--accent);color:var(--on-accent);border-radius:var(--r);min-height:44px}
+.step button{width:48px;height:44px;border:0;background:transparent;color:inherit;font-size:22px;font-weight:600;cursor:pointer;touch-action:manipulation}
+.step output{font-weight:800;font-size:17px}
+.hide{display:none!important}
+
+/* order form */
+section.order{padding-top:28px}
+h2{font-size:22px;letter-spacing:-.01em;margin:0 0 4px}
+.sub{margin:0 0 14px;color:var(--mute);font-size:14.5px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:12px}
+label.f{display:block;font-weight:650;font-size:14px;margin:14px 0 6px}
+label.f:first-child{margin-top:0}
+input[type=text],input[type=tel],textarea{width:100%;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--ink)}
+input::placeholder,textarea::placeholder{color:var(--mute);opacity:.85}
+textarea{min-height:80px;resize:vertical}
+input:focus,textarea:focus{border-color:var(--gold);outline:0;box-shadow:0 0 0 3px var(--gold-soft)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;border:1.5px solid var(--line);border-radius:var(--r);background:var(--bg);min-height:52px;cursor:pointer}
+.opt input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+.opt b{display:block;font-weight:650;font-size:15px}
+.opt small{display:block;color:var(--mute);font-size:13px;margin-top:1px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.dis{opacity:.5;cursor:not-allowed}
+.err{color:var(--err);font-size:13.5px;margin-top:6px;font-weight:600}
+.err:empty{display:none}
+
+.sum{font-size:14.5px}
+.sum .row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;color:var(--mute)}
+.sum .row span:last-child{color:var(--ink);font-weight:600;white-space:nowrap}
+.sum .empty{color:var(--mute)}
+.totalrow{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:12px;border-top:1px solid var(--line)}
+.totalrow span{font-weight:650}
+.totalrow strong{font-size:28px;font-weight:800;letter-spacing:-.02em;color:var(--accent)}
+.note{font-size:13.5px;color:var(--gold-ink);background:var(--gold-soft);border-radius:var(--r);padding:10px 12px;margin-top:12px}
+#go{width:100%;margin-top:14px;min-height:56px;border:0;border-radius:var(--r);background:var(--accent);color:var(--on-accent);font-size:17px;font-weight:800;cursor:pointer;touch-action:manipulation;transition:transform .15s}
+#go:active{transform:translateY(1px) scale(.99)}
+#done{margin-top:14px;padding:16px;border-radius:var(--r);background:var(--gold-soft);border:1.5px solid var(--gold);color:var(--gold-ink);font-weight:650}
+#done p{margin:0 0 8px}#done p:last-child{margin:0}
+#done a{color:inherit;font-weight:600}
+footer{text-align:center;color:var(--mute);font-size:13.5px;padding:28px 16px 12px}
+
+/* cart bar */
+#cart{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s cubic-bezier(.16,1,.3,1)}
+#cart.on{transform:none}
+#cart .in{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#cart .n{font-size:13.5px;color:var(--mute)}
+#cart .t{font-weight:800;font-size:20px;line-height:1.1}
+#cart a{display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:var(--r);background:var(--accent);color:var(--on-accent);font-weight:800;text-decoration:none}
+
+/* gallery */
+#gal{position:fixed;inset:0;background:#1a0b0e;z-index:50;display:none;flex-direction:column}
 #gal.on{display:flex}
-#gal header{background:none;border:0;display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;color:#fff;text-align:left}
-#gal .t{font-weight:600;font-size:15px}
+#gal header{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;color:#fff}
+#gal .t{font-weight:650;font-size:15px}
 #gal .c{font-size:13px;opacity:.8}
 #gx{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:28px;line-height:1;cursor:pointer;touch-action:manipulation}
 #gs{flex:1;min-height:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
 #gs::-webkit-scrollbar{display:none}
 #gs .sl{flex:0 0 100%;height:100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;padding:8px}
-#gs img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:8px}
+#gs img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:var(--r)}
 #gd{display:flex;justify-content:center;gap:8px;padding:14px}
 #gd i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35)}
-#gd i.on{background:var(--gold-l)}
-.body{padding:8px 10px 10px;display:flex;flex-direction:column;gap:4px;flex:1}
-.badge{align-self:flex-start;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px}
-.b-pre{background:#f6e6b4;color:#6a4b00}
-.b-ship{background:#eadfe1;color:var(--maroon)}
-.name{font-weight:600;font-size:15px;line-height:1.25}
-.code{font-size:12px;color:var(--mute)}
-.desc{font-size:12.5px;color:var(--mute)}
-.price{font-weight:700;color:var(--maroon);font-size:16px;margin-top:auto}
-.step{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
-.step button{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--maroon);background:#fff;color:var(--maroon);font-size:24px;line-height:1;cursor:pointer;touch-action:manipulation}
-.step button:active{background:var(--maroon);color:#fff}
-.step output{min-width:28px;text-align:center;font-weight:700;font-size:18px}
-form{background:var(--card);border:1px solid var(--gold-l);border-radius:12px;padding:14px}
-label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
-input[type=text],input[type=tel],textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid #d8c9a8;border-radius:10px;background:#fff;color:var(--ink)}
-textarea{min-height:76px;resize:vertical}
-input:focus,textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
-.opt{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1.5px solid #d8c9a8;border-radius:10px;margin-top:8px;background:#fff;min-height:48px;font-weight:500;font-size:15px;margin-bottom:0}
-.opt input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--maroon);flex:none}
-.opt small{display:block;color:var(--mute);font-weight:400}
-.opt.dis{opacity:.5}
-.opt.sel{border-color:var(--maroon);background:#fbf0ec}
-.hide{display:none}
-.err{color:var(--err);font-size:13px;margin-top:4px;min-height:0}
-.note{font-size:13px;color:var(--mute);margin-top:8px}
-.total{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:12px;border-top:2px solid var(--gold-l);font-size:15px}
-.total strong{font:700 26px Georgia,serif;color:var(--maroon)}
-.lines{font-size:13.5px;color:var(--mute);margin-top:10px}
-.lines div{display:flex;justify-content:space-between;gap:8px}
-#go{width:100%;margin-top:16px;min-height:54px;border:0;border-radius:12px;background:var(--maroon);color:#fff;font-size:17px;font-weight:700;cursor:pointer;border-bottom:3px solid var(--gold);touch-action:manipulation}
-#go:active{background:var(--maroon-d)}
-#done{margin-top:16px;padding:14px;border-radius:12px;background:#f6ecc9;border:1.5px solid var(--gold);font-weight:600}
-#done p{margin:0 0 8px}#done p:last-child{margin:0}
-#done a{color:var(--maroon)}
-footer{text-align:center;color:var(--mute);font-size:13px;padding:0 16px 28px}
+#gd i.on{background:#f0cf8c}
+
+@media (min-width:640px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#cart,#go{transition:none}}
 </style>
 </head>
 <body>
@@ -82,7 +137,7 @@ footer{text-align:center;color:var(--mute);font-size:13px;padding:0 16px 28px}
 const WHATSAPP_NUMBER   = "918448412211";   // country code + number, digits only
 const UPI_ID            = "[xxx@upi]";      // TODO: your UPI ID (not shown on page; for your reference)
 const NOIDA_DELIVERY_FEE = 150;             // flat fee in rupees for Noida delivery
-const PRE_DIWALI_CUTOFF = "Sat 7 Nov 2026"; // shown on "Before Diwali" badges info line
+const PRE_DIWALI_CUTOFF = "Sat 7 Nov 2026"; // shown in the order-by note at the top
 // Photos: put 1-5 files in photos/ named <code>-<n>.jpg (P-01-1.jpg, P-01-2.jpg ...). No other setting needed.
 // preDiwali: true = "Before Diwali", false = "Ships in 7-10 days"
 const PRODUCTS = [
@@ -104,66 +159,98 @@ const PRODUCTS = [
 /* ================== END OF CONFIG ================================== */
 </script>
 
-<header>
-  <h1>Kalakriti</h1>
-  <p>Handmade candles, diyas &amp; 3D-printed d&eacute;cor &middot; Noida</p>
-</header>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Kalakriti</div>
+    <p class="tag">Handmade candles, diyas and 3D-printed d&eacute;cor from Noida.</p>
+    <ul class="facts" id="facts"></ul>
+    <p class="cutoff" id="cutoff"></p>
+  </header>
+</div>
 
-<main>
-  <h2>Pick your items</h2>
+<div id="shop">
+<div class="bar"><div class="wrap">
+  <div class="chips" role="group" aria-label="Filter products">
+    <button type="button" class="chip" data-f="all" aria-pressed="true">All</button>
+    <button type="button" class="chip" data-f="pre" aria-pressed="false">Before Diwali</button>
+    <button type="button" class="chip" data-f="C" aria-pressed="false">Candles and diyas</button>
+    <button type="button" class="chip" data-f="P" aria-pressed="false">3D-printed d&eacute;cor</button>
+  </div>
+</div></div>
+
+<div class="wrap">
   <div class="grid" id="grid"></div>
+</div>
+</div>
 
-  <h2>Your details</h2>
-  <form id="f" novalidate autocomplete="off" onsubmit="return false">
-    <label for="name">Name *</label>
-    <input type="text" id="name" maxlength="60" autocomplete="off">
-    <div class="err" id="e-name"></div>
+<main class="wrap">
 
-    <label for="phone">Your WhatsApp number *</label>
-    <input type="tel" id="phone" inputmode="numeric" maxlength="16" placeholder="10-digit mobile number" autocomplete="off">
-    <div class="err" id="e-phone"></div>
+  <section class="order" id="order">
+    <h2>Your order</h2>
+    <p class="sub">Fill this in and we will open WhatsApp with your order ready to send.</p>
+    <form id="f" novalidate autocomplete="off" onsubmit="return false">
+      <div class="panel">
+        <label class="f" for="name">Name</label>
+        <input type="text" id="name" maxlength="60" autocomplete="off">
+        <div class="err" id="e-name"></div>
+        <label class="f" for="phone">Your WhatsApp number</label>
+        <input type="tel" id="phone" inputmode="numeric" maxlength="16" placeholder="10-digit mobile number" autocomplete="off">
+        <div class="err" id="e-phone"></div>
+      </div>
 
-    <label>Delivery *</label>
-    <label class="opt sel" id="o-Pickup"><input type="radio" name="dt" value="Pickup" checked><span>Stall pickup</span></label>
-    <label class="opt" id="o-Society"><input type="radio" name="dt" value="Society"><span>Society flat delivery (free)</span></label>
-    <label class="opt" id="o-Noida"><input type="radio" name="dt" value="Noida"><span id="noida-txt">Noida delivery<small>Prepaid only</small></span></label>
+      <div class="panel">
+        <label class="f" id="dl">Delivery</label>
+        <div class="opts" role="radiogroup" aria-labelledby="dl">
+          <label class="opt sel" id="o-Pickup"><input type="radio" name="dt" value="Pickup" checked><span><b>Stall pickup</b><small>Collect from us at the stall</small></span></label>
+          <label class="opt" id="o-Society"><input type="radio" name="dt" value="Society"><span><b>Society flat delivery</b><small>Free</small></span></label>
+          <label class="opt" id="o-Noida"><input type="radio" name="dt" value="Noida"><span><b id="noida-t">Noida delivery</b><small id="noida-s">Prepaid only</small></span></label>
+        </div>
+        <div id="soc" class="hide">
+          <label class="f" for="tower">Tower</label>
+          <input type="text" id="tower" maxlength="20" autocomplete="off">
+          <label class="f" for="flat">Flat number</label>
+          <input type="text" id="flat" maxlength="20" autocomplete="off">
+          <div class="err" id="e-soc"></div>
+        </div>
+        <div id="noi" class="hide">
+          <label class="f" for="addr">Full address</label>
+          <textarea id="addr" maxlength="250" autocomplete="off"></textarea>
+          <label class="f" for="pin">Pincode</label>
+          <input type="text" id="pin" inputmode="numeric" maxlength="6" autocomplete="off">
+          <div class="err" id="e-noi"></div>
+        </div>
+      </div>
 
-    <div id="soc" class="hide">
-      <label for="tower">Tower *</label>
-      <input type="text" id="tower" maxlength="20" autocomplete="off">
-      <label for="flat">Flat number *</label>
-      <input type="text" id="flat" maxlength="20" autocomplete="off">
-      <div class="err" id="e-soc"></div>
-    </div>
-    <div id="noi" class="hide">
-      <label for="addr">Full address *</label>
-      <textarea id="addr" maxlength="250" autocomplete="off"></textarea>
-      <label for="pin">Pincode *</label>
-      <input type="text" id="pin" inputmode="numeric" maxlength="6" autocomplete="off">
-      <div class="err" id="e-noi"></div>
-    </div>
+      <div class="panel">
+        <label class="f" for="notes">Notes (optional)</label>
+        <textarea id="notes" maxlength="200" placeholder="Custom name, colour, gift wrap" autocomplete="off"></textarea>
+      </div>
 
-    <label for="notes">Notes (optional)</label>
-    <textarea id="notes" maxlength="200" placeholder="Custom name, colour, etc." autocomplete="off"></textarea>
+      <div class="panel sum">
+        <div id="lines"></div>
+        <div class="totalrow"><span>Total</span><strong id="total">&#8377;0</strong></div>
+        <div class="note hide" id="mixnote"></div>
+        <div class="err" id="e-cart"></div>
+        <button type="button" id="go">Place order on WhatsApp</button>
+      </div>
+    </form>
 
-    <div class="lines" id="lines"></div>
-    <div class="total"><span>Total</span><strong id="total">&#8377;0</strong></div>
-    <div class="note hide" id="mixnote"></div>
-    <div class="err" id="e-cart"></div>
-
-    <button type="button" id="go">Place order on WhatsApp</button>
-  </form>
-
-  <div id="done" class="hide" role="status"></div>
+    <div id="done" class="hide" role="status"></div>
+  </section>
 </main>
+
+<footer>Lanterns and lamps use LED lights only.</footer>
+
+<div id="cart" aria-live="polite"><div class="in">
+  <div><div class="n" id="cn"></div><div class="t" id="ct"></div></div>
+  <a href="#order">Review order</a>
+</div></div>
 
 <div id="gal" role="dialog" aria-modal="true" aria-label="Product photos">
   <header><div><div class="t" id="gt"></div><div class="c" id="gc"></div></div><button type="button" id="gx" aria-label="Close photos">&times;</button></header>
   <div id="gs"></div>
   <div id="gd"></div>
 </div>
-
-<footer>Lanterns and lamps use LED lights only.</footer>
 
 <script>
 (function(){
@@ -173,66 +260,69 @@ const PRODUCTS = [
   var rsf = function(n){return "₹" + n.toLocaleString("en-IN")};
   var feeOk = typeof NOIDA_DELIVERY_FEE === "number" && NOIDA_DELIVERY_FEE >= 0;
 
+  // ---- top strip ----
+  [ "Stall pickup", "Free society delivery", feeOk ? "Noida delivery +" + rsf(NOIDA_DELIVERY_FEE) : "" ].forEach(function(t){
+    if (!t) return; var li = document.createElement("li"); li.textContent = t; $("facts").appendChild(li);
+  });
+  $("cutoff").textContent = "Order Before Diwali items by " + PRE_DIWALI_CUTOFF + ". Other items ship in 7-10 days.";
+
   // ---- grid ----
-  var grid = $("grid");
+  var grid = $("grid"), cardEl = {};
   PRODUCTS.forEach(function(p){
     qty[p.code] = 0;
-    var c = document.createElement("div");
-    c.className = "card";
-    var ph = document.createElement("div");
-    ph.className = "ph";
-    var np = document.createElement("div");
-    np.className = "nophoto"; np.textContent = p.name;
-    ph.appendChild(np);
-    var img = new Image();
-    img.alt = p.name; img.decoding = "async";
-    img.onload = function(){ np.remove(); ph.insertBefore(img, ph.firstChild); ph.className = "ph has";
+    var c = document.createElement("article"); c.className = "card"; c.dataset.group = p.code.charAt(0); c.dataset.pre = p.preDiwali ? "1" : "0";
+    cardEl[p.code] = c;
+    var ph = document.createElement("div"); ph.className = "ph";
+    var np = document.createElement("div"); np.className = "nophoto"; np.textContent = p.name; ph.appendChild(np);
+    var more = document.createElement("span"); more.className = "more"; more.textContent = "More photos"; ph.appendChild(more);
+    var img = new Image(); img.alt = p.name; img.decoding = "async";
+    img.onload = function(){ np.remove(); ph.insertBefore(img, ph.firstChild); ph.classList.add("has");
       ph.setAttribute("role","button"); ph.setAttribute("tabindex","0"); ph.setAttribute("aria-label","View photos of " + p.name);
       ph.onclick = function(){ openGal(p, ph); };
       ph.onkeydown = function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openGal(p, ph); } };
-      probeMore(p, ph); };
-    (function(img, ph, p){ // fetch the card photo only when the card is near the screen (saves mobile data)
-      var go = function(){ img.src = "photos/" + p.code + "-1.jpg"; };
-      if ("IntersectionObserver" in window){
-        var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ io.disconnect(); go(); } }, {rootMargin:"300px"});
-        io.observe(ph);
-      } else go();
-    })(img, ph, p);
-    var b = document.createElement("div");
-    b.className = "body";
-    var badge = document.createElement("span");
-    badge.className = "badge " + (p.preDiwali ? "b-pre" : "b-ship");
-    badge.textContent = p.preDiwali ? "Before Diwali" : "Ships in 7-10 days";
+      var t = new Image(); t.onload = function(){ ph.classList.add("multi"); }; t.src = "photos/" + p.code + "-2.jpg"; };
+    (function(){ var go = function(){ img.src = "photos/" + p.code + "-1.jpg"; };
+      if ("IntersectionObserver" in window){ var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ io.disconnect(); go(); } }, {rootMargin:"300px"}); io.observe(ph); } else go(); })();
+    var b = document.createElement("div"); b.className = "info";
+    var badge = document.createElement("span"); badge.className = "badge" + (p.preDiwali ? "" : " ship"); badge.textContent = p.preDiwali ? "Before Diwali" : "Ships in 7-10 days";
     var nm = document.createElement("div"); nm.className = "name"; nm.textContent = p.name;
     var cd = document.createElement("div"); cd.className = "code"; cd.textContent = p.code;
     b.appendChild(badge); b.appendChild(nm); b.appendChild(cd);
     if (p.description){ var d = document.createElement("div"); d.className = "desc"; d.textContent = p.description; b.appendChild(d); }
     var pr = document.createElement("div"); pr.className = "price"; pr.textContent = rsf(p.price); b.appendChild(pr);
-    var st = document.createElement("div"); st.className = "step";
+    var ctl = document.createElement("div"); ctl.className = "ctl";
+    var add = document.createElement("button"); add.type = "button"; add.className = "add"; add.textContent = "Add"; add.setAttribute("aria-label","Add " + p.name);
+    var st = document.createElement("div"); st.className = "step hide";
     var m = document.createElement("button"); m.type = "button"; m.textContent = "−"; m.setAttribute("aria-label","Remove one " + p.name);
-    var o = document.createElement("output"); o.id = "q-" + p.code; o.textContent = "0";
+    var o = document.createElement("output"); o.setAttribute("aria-label","Quantity");
     var a = document.createElement("button"); a.type = "button"; a.textContent = "+"; a.setAttribute("aria-label","Add one " + p.name);
+    add.onclick = function(){ qty[p.code] = 1; upd(); };
     m.onclick = function(){ if (qty[p.code] > 0){ qty[p.code]--; upd(); } };
     a.onclick = function(){ if (qty[p.code] < 20){ qty[p.code]++; upd(); } };
-    st.appendChild(m); st.appendChild(o); st.appendChild(a);
-    b.appendChild(st);
-    c.appendChild(ph); c.appendChild(b);
-    grid.appendChild(c);
+    st.appendChild(m); st.appendChild(o); st.appendChild(a); ctl.appendChild(add); ctl.appendChild(st); b.appendChild(ctl);
+    c._add = add; c._st = st; c._o = o;
+    c.appendChild(ph); c.appendChild(b); grid.appendChild(c);
+  });
+
+  // ---- filters ----
+  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(ch){
+    ch.onclick = function(){
+      Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(x){ x.setAttribute("aria-pressed", x === ch ? "true" : "false"); });
+      var f = ch.dataset.f;
+      PRODUCTS.forEach(function(p){ var c = cardEl[p.code];
+        var show = f === "all" || (f === "pre" && p.preDiwali) || f === p.code.charAt(0);
+        c.classList.toggle("hide", !show); });
+    };
   });
 
   // ---- gallery ----
   var gal = $("gal"), gs = $("gs"), gd = $("gd"), lastFocus = null;
-  function probeMore(p, ph){ // is there a 2nd photo? just a hint badge on the card
-    var t = new Image(); t.onload = function(){ ph.classList.add("multi"); };
-    t.src = "photos/" + p.code + "-2.jpg";
-  }
   function openGal(p, from){
     lastFocus = from; gs.innerHTML = ""; gd.innerHTML = "";
     $("gt").textContent = p.name + " (" + p.code + ")";
-    var n = 0, pending = 5;
     function refresh(){
       var slides = gs.children;
-      $("gc").textContent = slides.length > 1 ? "Swipe for more · " + slides.length + " photos" : "";
+      $("gc").textContent = slides.length > 1 ? "Swipe for more. " + slides.length + " photos" : "";
       gd.innerHTML = ""; for (var i = 0; i < slides.length && slides.length > 1; i++){ gd.appendChild(document.createElement("i")); }
       dots();
     }
@@ -246,10 +336,7 @@ const PRODUCTS = [
     })(k);
     gal.classList.add("on"); document.body.style.overflow = "hidden"; $("gx").focus();
   }
-  function dots(){
-    var w = gs.clientWidth || 1, i = Math.round(gs.scrollLeft / w), d = gd.children;
-    for (var j = 0; j < d.length; j++) d[j].className = j === i ? "on" : "";
-  }
+  function dots(){ var w = gs.clientWidth || 1, i = Math.round(gs.scrollLeft / w), d = gd.children; for (var j = 0; j < d.length; j++) d[j].className = j === i ? "on" : ""; }
   gs.addEventListener("scroll", dots, {passive:true});
   function closeGal(){ gal.classList.remove("on"); document.body.style.overflow = ""; gs.innerHTML = ""; if (lastFocus) lastFocus.focus(); }
   $("gx").onclick = closeGal;
@@ -257,40 +344,39 @@ const PRODUCTS = [
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && gal.classList.contains("on")) closeGal(); });
 
   // ---- delivery option labels ----
-  if (feeOk) $("noida-txt").innerHTML = "Noida delivery (+" + rsf(NOIDA_DELIVERY_FEE) + ")<small>Prepaid only</small>";
-  else {
-    $("noida-txt").innerHTML = "Noida delivery<small>Not available yet</small>";
-    document.querySelector('input[value="Noida"]').disabled = true;
-    $("o-Noida").classList.add("dis");
-  }
+  if (feeOk){ $("noida-t").textContent = "Noida delivery (+" + rsf(NOIDA_DELIVERY_FEE) + ")"; }
+  else { $("noida-s").textContent = "Not available yet"; document.querySelector('input[value="Noida"]').disabled = true; $("o-Noida").classList.add("dis"); }
 
   function dtype(){ return document.querySelector('input[name="dt"]:checked').value; }
   function fee(){ return dtype() === "Noida" && feeOk ? NOIDA_DELIVERY_FEE : 0; }
   function subtotal(){ return PRODUCTS.reduce(function(s,p){return s + p.price * qty[p.code]}, 0); }
+  function esc(s){ return s.replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
 
   function upd(){
-    PRODUCTS.forEach(function(p){ $("q-" + p.code).textContent = qty[p.code]; });
-    var dt = dtype();
+    var dt = dtype(), sub = subtotal(), count = 0, pre = false, late = false, lines = "";
+    PRODUCTS.forEach(function(p){
+      var c = cardEl[p.code], q = qty[p.code];
+      c._add.classList.toggle("hide", q > 0); c._st.classList.toggle("hide", q === 0); c._o.textContent = q;
+      if (q){ count += q; if (p.preDiwali) pre = true; else late = true;
+        lines += '<div class="row"><span>' + esc(p.name) + " ×" + q + "</span><span>" + rsf(p.price * q) + "</span></div>"; }
+    });
     ["Pickup","Society","Noida"].forEach(function(k){ $("o-" + k).classList.toggle("sel", k === dt); });
     $("soc").classList.toggle("hide", dt !== "Society");
     $("noi").classList.toggle("hide", dt !== "Noida");
-    var lines = "", sub = subtotal(), any = false, pre = false, late = false;
-    PRODUCTS.forEach(function(p){
-      if (qty[p.code]){ any = true; if (p.preDiwali) pre = true; else late = true;
-        lines += "<div><span>" + esc(p.name) + " ×" + qty[p.code] + "</span><span>" + rsf(p.price * qty[p.code]) + "</span></div>"; }
-    });
-    if (fee()) lines += "<div><span>Noida delivery</span><span>" + rsf(fee()) + "</span></div>";
-    $("lines").innerHTML = lines;
-    $("total").textContent = rsf(sub + fee());
+    if (fee()) lines += '<div class="row"><span>Noida delivery</span><span>' + rsf(fee()) + "</span></div>";
+    $("lines").innerHTML = lines || '<div class="row empty"><span>No items yet. Tap Add on any product.</span></div>';
+    var total = sub + fee();
+    $("total").textContent = rsf(total);
     var mn = $("mixnote");
     if (pre && late){ mn.textContent = "Your order has items for before Diwali (by " + PRE_DIWALI_CUTOFF + ") and items that ship in 7-10 days."; mn.classList.remove("hide"); }
     else mn.classList.add("hide");
+    $("cn").textContent = count + (count === 1 ? " item" : " items");
+    $("ct").textContent = rsf(total);
+    $("cart").classList.toggle("on", count > 0);
   }
-  function esc(s){ return s.replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}); }
-
   Array.prototype.forEach.call(document.querySelectorAll('input[name="dt"]'), function(r){ r.onchange = upd; });
 
-  // ---- message ----
+  // ---- message (format is parsed by an automation: do not change) ----
   function clean(s){ return String(s || "").replace(/[\r\n\t]+/g, " ").replace(/[|;]/g, ",").replace(/\s+/g, " ").trim(); }
   function makeId(){
     var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", t = Date.now().toString(36).toUpperCase().slice(-3), r = "";
@@ -351,7 +437,7 @@ const PRODUCTS = [
     var d = $("done");
     d.innerHTML = "<p>Send the WhatsApp message to confirm. We'll reply with UPI payment details.</p>" +
       (r.dt === "Noida" ? "<p>Payment is required before dispatch.</p>" : "") +
-      '<p><a id="again" href="' + url + '" target="_blank" rel="noopener">WhatsApp didn’t open? Tap here</a></p>';
+      '<p><a id="again" href="' + url + '" target="_blank" rel="noopener">WhatsApp did not open? Tap here</a></p>';
     d.classList.remove("hide");
     window.open(url, "_blank");
     if (d.scrollIntoView) d.scrollIntoView({block:"center", behavior:"smooth"});
